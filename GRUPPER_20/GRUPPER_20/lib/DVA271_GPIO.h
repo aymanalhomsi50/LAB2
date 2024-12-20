@@ -20,13 +20,15 @@
 int hc595_init(void);
 
 // Indikerar temperaturen via HC595
-int temp_indicate();
+int temp_indicate(float temperature);
 
 // Flippar tillståndet för en LED-pin
 int flip_pin(int pin);
 
 // Sätter tillståndet för båda LEDs
 int set_led_state(int led1, int led2);
+
+int hc595_shift_out(uint8_t value);
 
 
 #endif // DVA271_GPIO_H
