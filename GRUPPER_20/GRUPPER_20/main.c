@@ -16,8 +16,12 @@ pthread_mutex_t eeprom_mutex; // deklerar och initierar mutex
 
 void* write_jokes_thread(void* arg) {
     // A set of jokes to write into the EEPROM in a loop
-    const char jokes[] = {
-        "kaffe kanna"
+
+
+    
+    
+       const char *jokes[] = {
+    "kaffe kanna"
     };
     int num_jokes = sizeof(jokes) / sizeof(jokes[0]);
     int joke_index = 0;
@@ -26,7 +30,7 @@ void* write_jokes_thread(void* arg) {
         // Lock the EEPROM mutex before write operations
         pthread_mutex_lock(&eeprom_mutex);
 
-        const char current_joke = jokes[joke_index];
+        const char *current_joke = jokes[joke_index];
         char arr[255];
         memset(arr, 0, sizeof(arr));
         size_t joke_len = strlen(current_joke);
