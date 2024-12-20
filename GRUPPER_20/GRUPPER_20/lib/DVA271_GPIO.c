@@ -19,6 +19,28 @@ static struct gpiod_line *led3_line = NULL; // första led
 static struct gpiod_line *led4_line = NULL; // andra led 
 
 
+int hc595_shift_out(uint8_t value) {
+    // Shift out 8 bits to the shift register using Data, Clock, and Latch lines
+    for (int i = 7; i >= 0; i--) {
+        int bit_val = (value >> i) & 1;
+
+        // Set data line according to the current bit
+        gpiod_line_set_value(data_line, bit_val);
+
+        // Pulse the clock line
+        gpiod_line_set_value(clock_line, 1);
+        usleep(1);
+        gpiod_line_set_value(clock_line, 0);
+    }
+
+    // Pulse the latch line to transfer the shifted data to the output pins
+    gpiod_line_set_value(latch_line, 1);
+    usleep(1);
+    gpiod_line_set_value(latch_line, 0);
+
+    return 0;
+}
+
 int temp_indicate() {
     FILE *temp_file;
     char temp_str[16];
@@ -43,9 +65,24 @@ int temp_indicate() {
     temp_value = atoi(temp_str) / 1000; // Temperaturen i °C.
     printf("Current CPU temperature: %d°C\n", temp_value);
 
-    // Indikerar temperatur med lysdioder.
-    gpiod_line_set_value(led3_line, temp_value >= 85 ? 1 : 0); // LED1 lyser vid hög temperatur.
-    gpiod_line_set_value(led4_line, temp_value >= 40 ? 1 : 0); // LED2 lyser vid medelhög temperatur.
+    // Beräkna antal LED-lampor som ska lysa beroende på temperaturen
+    // Exempel: Varje 10°C representerar en extra LED.
+    // Om temp_value är 85°C eller mer, alla 8 tänds.
+    int led_count = temp_value / 10;
+    if (led_count > 8) {
+        led_count = 8;
+    }
+
+    // Skapa ett mönster för LED-lamporna.
+    // Om led_count = 3, betyder det att 3 lägsta bitarna ska vara 1 (00000111).
+    // (1 << led_count) - 1 skapar ett sådant maskeringsvärde.
+    uint8_t led_pattern = 0;
+    if (led_count > 0) {
+        led_pattern = (1 << led_count) - 1;
+    }
+
+    // Skicka ut bitmönstret till 74HC595
+    hc595_shift_out(led_pattern);
 
     return 0;
 }
