@@ -125,6 +125,7 @@ int main() {
     pthread_join(read_thread, NULL);
     pthread_join(led1_thread, NULL);
     pthread_join(led2_thread, NULL);
+    pthread_join(temp_ind_thread, NULL);
 
     // ta bort  mutex
     pthread_mutex_destroy(&eeprom_mutex);
