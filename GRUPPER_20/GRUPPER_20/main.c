@@ -14,23 +14,44 @@ pthread_mutex_t eeprom_mutex; // deklerar och initierar mutex
 
 // Funktioner för trådar
 
-void* write_jokes_thread(void* arg) { // skriver skämt kontinuerligt till eeprom 
-    while (1) {
-        pthread_mutex_lock(&eeprom_mutex); // låser mutex för att ingen aning ska ha åtskomst till eeprom
-char arr[255];
-memset(arr, 'A', 255); // fyller array med 'A'
-arr[254] = 'A'; // skriver sista ele,emt till A 
-write_joke(arr, 255); // Write a full block of 'A's
+void* write_jokes_thread(void* arg) {
+    // A set of jokes to write into the EEPROM in a loop
+    const char jokes[] = {
+        "kaffe kanna"
+    };
+    int num_jokes = sizeof(jokes) / sizeof(jokes[0]);
+    int joke_index = 0;
 
-if (write_joke(arr, 255) != 0) { // om skrivning misslyckas
-    printf("Misslyckades att skriva skämt till EEPROM\n");
-}
-        pthread_mutex_unlock(&eeprom_mutex); //låser upp mutex
-        
-        sleep(1); // Justera efter behov
+    while (1) {
+        // Lock the EEPROM mutex before write operations
+        pthread_mutex_lock(&eeprom_mutex);
+
+        const charcurrent_joke = jokes[joke_index];
+        char arr[255];
+        memset(arr, 0, sizeof(arr));
+        size_t joke_len = strlen(current_joke);
+        if (joke_len > 255) {
+            joke_len = 255; // Truncate if too long
+        }
+        memcpy(arr, current_joke, joke_len);
+
+        // Write the chosen joke to the EEPROM at position 0
+        if (write_joke(arr, (int)joke_len) != 0) {
+            printf("Misslyckades att skriva skämt till EEPROM\n");
+        }
+
+        // Unlock the mutex after the write is done
+        pthread_mutex_unlock(&eeprom_mutex);
+
+        // Move to the next joke in the list (wrap around)
+        joke_index = (joke_index + 1) % num_jokes;
+
+        // Sleep for 2 seconds before writing the next joke
+        sleep(2);
     }
     return NULL;
 }
+
 
 void* read_jokes_thread(void* arg) { // läser skämt kontinuerligt från eeprom
     while (1) {
