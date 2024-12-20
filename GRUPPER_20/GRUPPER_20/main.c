@@ -26,7 +26,7 @@ void* write_jokes_thread(void* arg) {
         // Lock the EEPROM mutex before write operations
         pthread_mutex_lock(&eeprom_mutex);
 
-        const charcurrent_joke = jokes[joke_index];
+        const char current_joke = jokes[joke_index];
         char arr[255];
         memset(arr, 0, sizeof(arr));
         size_t joke_len = strlen(current_joke);
