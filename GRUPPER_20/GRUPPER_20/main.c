@@ -18,8 +18,8 @@ void* write_jokes_thread(void* arg) { // skriver skämt kontinuerligt till eepro
     while (1) {
         pthread_mutex_lock(&eeprom_mutex); // låser mutex för att ingen aning ska ha åtskomst till eeprom
 char arr[255];
-memset(arr, 'kaffekanna', 255); // fyller array med 'A'
-arr[254] = 'kaffekanna'; // skriver sista ele,emt till A 
+memset(arr, 'A', 255); // fyller array med 'A'
+arr[254] = 'A'; // skriver sista ele,emt till A 
 write_joke(arr, 255); // Write a full block of 'A's
 
 if (write_joke(arr, 255) != 0) { // om skrivning misslyckas
