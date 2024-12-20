@@ -21,7 +21,7 @@ void* write_jokes_thread(void* arg) {
     
     
     const char *jokes[] = {
-    "kaffe kanna"
+    "kaffe buna"
     };
     
     int num_jokes = sizeof(jokes) / sizeof(jokes[0]);
