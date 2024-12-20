@@ -11,6 +11,8 @@
 #define CLOCK_PIN   22
 #define LED1_PIN    23
 #define LED2_PIN    24
+#define LED3_PIN    4
+#define LED4_PIN    26
 
 #define CHIP_NAME "/dev/gpiochip0"
 
