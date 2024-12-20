@@ -19,7 +19,7 @@ static struct gpiod_line *led3_line = NULL; // första led
 static struct gpiod_line *led4_line = NULL; // andra led 
 
 
-int hc595_shift_out(uint8_t value) {
+int hc595_shift_out(int value) {
     // Shift out 8 bits to the shift register using Data, Clock, and Latch lines
     for (int i = 7; i >= 0; i--) {
         int bit_val = (value >> i) & 1;
