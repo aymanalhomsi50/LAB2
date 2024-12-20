@@ -20,7 +20,7 @@
 int hc595_init(void);
 
 // Indikerar temperaturen via HC595
-int temp_indicate(float temperature);
+int temp_indicate();
 
 // Flippar tillståndet för en LED-pin
 int flip_pin(int pin);
