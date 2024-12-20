@@ -76,7 +76,7 @@ int temp_indicate() {
     // Skapa ett mönster för LED-lamporna.
     // Om led_count = 3, betyder det att 3 lägsta bitarna ska vara 1 (00000111).
     // (1 << led_count) - 1 skapar ett sådant maskeringsvärde.
-    uint8_t led_pattern = 0;
+   int led_pattern = 0;
     if (led_count > 0) {
         led_pattern = (1 << led_count) - 1;
     }
