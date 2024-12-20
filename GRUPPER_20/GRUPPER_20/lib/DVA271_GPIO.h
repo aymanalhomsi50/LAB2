@@ -28,7 +28,7 @@ int flip_pin(int pin);
 // Sätter tillståndet för båda LEDs
 int set_led_state(int led1, int led2);
 
-int hc595_shift_out(uint8_t value);
+int hc595_shift_out(int value);
 
 
 #endif // DVA271_GPIO_H
